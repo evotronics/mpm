@@ -88,6 +88,8 @@ mpm repo tag 'widget-web-*' --add web
 mpm group add extras --source github:other-org --disabled
 mpm group enable extras
 mpm config set jobs 16
+mpm discover                  # new repos in each group's GitHub owner (needs gh)
+mpm -n discover core --add    # preview adding them
 ```
 
 ## Usage
@@ -117,6 +119,7 @@ mpm [global options] <command> [options] [args...]
 | `group list\|add\|rm\|enable\|disable\|set\|tag` | Manage groups |
 | `config get\|set\|unset\|path\|validate\|edit` | Workspace settings (`config set jobs 16`) |
 | `doctor` | Find stray checkouts, missing clones, and origin URL mismatches |
+| `discover [groups...]` | Find GitHub repos not in the config yet, via `gh` (`--add`, `--clone`) |
 | `completion bash\|zsh\|fish` | Print a shell completion script |
 | `exec -- <cmd> [args]` | Run a command in each repo (`--shell`, `--prefix`, `-i/--interactive`, `--read-only`) |
 

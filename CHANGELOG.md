@@ -86,6 +86,11 @@
   `config set|unset|edit --user` edit the user config.
 - `--dirty` selects repos with uncommitted changes or untracked files,
   for example `mpm diff --dirty` or `mpm exec --dirty -- git stash`.
+- `discover` lists repos in each group's GitHub owner (via the GitHub CLI,
+  `gh`) that are not in the config yet, plus name conflicts, configured
+  repos gone upstream, and repos archived upstream but still enabled.
+  `--add` adds the new repos to their group and `--clone` also clones them;
+  archived repos and forks are only offered with `--archived` or `--forks`.
 - `status --fetch` (`-f`) fetches before showing status so ahead/behind
   counts are current. Repos whose fetch fails still show their local
   status, marked `fetch failed`.

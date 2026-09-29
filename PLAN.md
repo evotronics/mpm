@@ -242,8 +242,9 @@ Config management (all support `--dry-run`, which prints a unified diff of
 
 Later:
 
-- `discover <group>`: list the host org's repos that aren't in the config yet
-  (via `gh` or the API), optionally add them. Helps with "new repo was added".
+- ✅ `discover [groups...]`: list the GitHub owner's repos that aren't in the
+  config yet (via `gh`), and `--add`/`--clone` them. Helps with "new repo was
+  added".
 - User-defined **command aliases** in config, e.g.
   `aliases: {outdated: "exec -- npm outdated"}`.
 - ✅ Shell completion (bash, zsh, fish): `mpm completion <shell>` prints a
@@ -310,9 +311,9 @@ Key principles:
    in dry run. ✅ `doctor`.
 5. **Polish and release**: README, docs, completion, npm publish under the
    chosen scope.
-6. **Future**: `discover`, TUI, per-repo hooks or setup commands. ✅
-   Aliases, user config and protocol override, and shell completion are
-   done.
+6. **Future**: TUI, per-repo hooks or setup commands. ✅ Aliases, user
+   config and protocol override, shell completion, `status --fetch`,
+   `--dirty`, and `discover` are done.
 
 ## 9. Migration from the bash version
 
@@ -337,7 +338,8 @@ Mapping, for hand conversion:
 - ❓ npm scope and package name. `package.json` is `"private": true` for
   now.
 - ❓ JSON output schema details (to design with the first JSON consumers).
-- ❓ `discover`: shell out to `gh`, or call the GitHub REST API directly?
+- ✅ `discover` uses the GitHub CLI (`gh repo list --json`), which handles
+  auth and private repos; it is only needed for `discover`.
 
 ## 11. Implementation notes (for later milestones)
 

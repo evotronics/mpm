@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'vitest';
-import {isFullRef, refToName, resolveRepoUrl} from '../../lib/repos/source.js';
+import {githubOwner, isFullRef, refToName, resolveRepoUrl}
+  from '../../lib/repos/source.js';
 
 const root = '/ws';
 
@@ -75,5 +76,20 @@ describe('isFullRef', () => {
     expect(isFullRef('git@host:x')).toBe(true);
     expect(isFullRef('https://host/x')).toBe(true);
     expect(isFullRef('./x')).toBe(true);
+  });
+});
+
+describe('githubOwner', () => {
+  it('finds GitHub owners in sources', () => {
+    const options = {root: '/ws'};
+    expect(githubOwner('github:example-org', options)).toBe('example-org');
+    expect(githubOwner('git@github.com:example-org', options))
+      .toBe('example-org');
+    expect(githubOwner('https://github.com/example-org/', options))
+      .toBe('example-org');
+    expect(githubOwner('gitlab:example-org', options)).toBe(null);
+    expect(githubOwner('github:org/sub', options)).toBe(null);
+    expect(githubOwner('/srv/git', options)).toBe(null);
+    expect(githubOwner(undefined, options)).toBe(null);
   });
 });

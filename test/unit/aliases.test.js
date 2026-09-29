@@ -1,6 +1,6 @@
 import {commandIndex, splitWords} from '../../lib/cli/aliases.js';
 import {describe, expect, it} from 'vitest';
-import {urlKey} from '../../lib/commands/doctor.js';
+import {urlKey} from '../../lib/repos/source.js';
 
 describe('splitWords', () => {
   it('splits like a shell', () => {
