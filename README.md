@@ -117,6 +117,7 @@ mpm [global options] <command> [options] [args...]
 | `group list\|add\|rm\|enable\|disable\|set\|tag` | Manage groups |
 | `config get\|set\|unset\|path\|validate\|edit` | Workspace settings (`config set jobs 16`) |
 | `doctor` | Find stray checkouts, missing clones, and origin URL mismatches |
+| `completion bash\|zsh\|fish` | Print a shell completion script |
 | `exec -- <cmd> [args]` | Run a command in each repo (`--shell`, `--prefix`, `-i/--interactive`, `--read-only`) |
 
 Global options: `-C/--workspace`, `-n/--dry-run`, `-j/--jobs`, `-v/--verbose`,
@@ -153,6 +154,17 @@ For `grep` and `exec`, mpm's options come first. Everything from the first
 unrecognized argument on is passed through unchanged. After `grep`, use the
 long forms of global options (`--dry-run`, `--json`, ...), or put them before
 `grep`, because short options such as `-n` belong to `git grep`.
+
+## Shell completion
+
+Completes commands, options, repo names, group ids, tags, config keys, and
+aliases from the current workspace:
+
+```sh
+source <(mpm completion bash)                         # in ~/.bashrc
+source <(mpm completion zsh)                          # in ~/.zshrc, after compinit
+mpm completion fish > ~/.config/fish/completions/mpm.fish
+```
 
 ## Exit codes
 

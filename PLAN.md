@@ -246,7 +246,10 @@ Later:
   (via `gh` or the API), optionally add them. Helps with "new repo was added".
 - User-defined **command aliases** in config, e.g.
   `aliases: {outdated: "exec -- npm outdated"}`.
-- Shell completion (bash, zsh, fish).
+- ✅ Shell completion (bash, zsh, fish): `mpm completion <shell>` prints a
+  script that calls the hidden `mpm __complete -- <words>`, so all logic is
+  in JS (command tree, option choices, groups, tags, repos, config keys,
+  aliases from the current workspace).
 
 ## 7. Architecture
 
@@ -307,8 +310,9 @@ Key principles:
    in dry run. ✅ `doctor`.
 5. **Polish and release**: README, docs, completion, npm publish under the
    chosen scope.
-6. **Future**: `discover`, TUI, per-repo hooks or setup commands, shell
-   completion. ✅ Aliases are done.
+6. **Future**: `discover`, TUI, per-repo hooks or setup commands. ✅
+   Aliases, user config and protocol override, and shell completion are
+   done.
 
 ## 9. Migration from the bash version
 
