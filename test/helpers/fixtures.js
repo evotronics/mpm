@@ -24,13 +24,26 @@ export async function git(cwd, ...args) {
   return stdout;
 }
 
+const tempDirs = [];
+
 /**
- * Create a temporary directory.
+ * Create a temporary directory, removed by `removeTempDirs()`.
  *
  * @returns {Promise<string>} Path.
  */
 export async function tempDir() {
-  return fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'mpm-test-')));
+  const dir = await fs.realpath(
+    await fs.mkdtemp(path.join(os.tmpdir(), 'mpm-test-')));
+  tempDirs.push(dir);
+  return dir;
+}
+
+/**
+ * Remove temporary directories created by this test file.
+ */
+export async function removeTempDirs() {
+  await Promise.all(tempDirs.splice(0).map(
+    dir => fs.rm(dir, {recursive: true, force: true})));
 }
 
 /**
