@@ -84,6 +84,8 @@
   `MPM_PROTOCOL`, workspace `mpm.yaml`, user config, then defaults.
   `config get --show-origin` shows where values come from, and
   `config set|unset|edit --user` edit the user config.
+- `--dirty` selects repos with uncommitted changes or untracked files,
+  for example `mpm diff --dirty` or `mpm exec --dirty -- git stash`.
 - `status --fetch` (`-f`) fetches before showing status so ahead/behind
   counts are current. Repos whose fetch fails still show their local
   status, marked `fetch failed`.

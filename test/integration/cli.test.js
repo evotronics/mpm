@@ -106,6 +106,29 @@ describe('repo commands', () => {
     expect(result.stderr).toMatch(/Unknown repo "nope"/);
   });
 
+  it('selects repos by checkout state', async () => {
+    await run(['clone', 'alpha'], {cwd: ws});
+    let result = await run(['list', '--names', '--cloned'], {cwd: ws});
+    expect(result.stdout).toBe('alpha\n');
+    result = await run(['list', '--names', '--missing'], {cwd: ws});
+    expect(result.stdout).toBe('beta\n');
+    result = await run(['list', '--names', '--dirty'], {cwd: ws});
+    expect(result.stdout).toBe('');
+
+    await writeFiles(path.join(ws, 'alpha'), {'untracked.txt': 'x'});
+    result = await run(['list', '--names', '--dirty'], {cwd: ws});
+    expect(result.stdout).toBe('alpha\n');
+    await fs.rm(path.join(ws, 'alpha', 'untracked.txt'));
+    await fs.appendFile(path.join(ws, 'alpha', 'README.md'), 'x\n');
+    result = await run(['exec', '--prefix', '--dirty', '--', 'git', 'diff',
+      '--name-only'], {cwd: ws});
+    expect(result.stdout).toBe('alpha: README.md\n1 repo: 1 ok\n');
+
+    result = await run(['list', '--missing', '--dirty'], {cwd: ws});
+    expect(result.code).toBe(2);
+    expect(result.stderr).toMatch(/cannot be used with option '--dirty'/);
+  });
+
   it('clones missing repos, honoring dry run', async () => {
     let result = await run(['-n', 'clone'], {cwd: ws});
     expect(result.code).toBe(0);

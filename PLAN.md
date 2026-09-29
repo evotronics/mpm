@@ -190,7 +190,7 @@ mpm [global options] <command> [subcommand] [options] [args...]
 | `-x, --exclude <glob>` | |
 | `--from <repo>` | Resume from a repo in config order. Replaces `-s`. |
 | `--all` | Include disabled repos and groups |
-| `--missing` / `--cloned` | State filters (`--dirty` later) |
+| `--missing` / `--cloned` / `--dirty` | State filters; `--dirty` = anything `git status --porcelain` reports (not ignored files) |
 
 The default selection is all *enabled* repos in *enabled* groups. Naming a
 disabled group or repo explicitly (`-g ch`) selects it, with a notice.

@@ -135,6 +135,7 @@ Repo selection options (most commands):
 | `-a, --all` | Include disabled repos and groups |
 | `--from <repo>` | Resume a run at a repo |
 | `--missing`, `--cloned` | Filter by checkout state |
+| `--dirty` | Only repos with uncommitted changes or untracked files |
 
 Examples:
 
