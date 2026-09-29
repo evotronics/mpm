@@ -1,0 +1,52 @@
+{
+  "name": "mpm",
+  "version": "0.1.0-0",
+  "private": true,
+  "description": "Multiple Project Manager: manage, update, and search many git repositories at once.",
+  "license": "BSD-3-Clause",
+  "author": "David I. Lehn <dil@lehn.org>",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "mpm": "./bin/mpm.js",
+    "multiple-project-manager": "./bin/mpm.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "schemas/"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "git",
+    "multi-repo",
+    "monorepo",
+    "workspace",
+    "grep",
+    "cli"
+  ],
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "commander": "^15.0.0",
+    "p-queue": "^9.3.3",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@digitalbazaar/eslint-config": "^9.0.0",
+    "eslint": "^10.11.0",
+    "vitest": "^5.0.2"
+  }
+}
