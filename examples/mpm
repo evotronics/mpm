@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Script to manage and build projects:
+# - group-a
+# - group-b
+# - myorg
+# - ...
+#
+# Copyright (c) 2014-2015 David I. Lehn
+# Author: David I. Lehn <dil@lehn.org>
+
+ROOT=`cd $(dirname $0) && pwd`
+
+. $ROOT/mpm-group-a.conf
+EXTRA_MODS="$G_A_MODS"
+CLONE_MODS="$G_A_MODS"
+DEFAULT_MODS="$G_A_MODS"
+NO_BUILD_MODS="$G_A_MODS"
+MODS="$G_A_MODS"
+
+. $ROOT/mpm-group-b.conf
+EXTRA_MODS="$EXTRA_MODS $G_B_EXTRA_MODS"
+CLONE_MODS="$CLONE_MODS $G_B_CLONE_MODS"
+DEFAULT_MODS="$DEFAULT_MODS $G_B_DEFAULT_MODS"
+NO_BUILD_MODS="$NO_BUILD_MODS $G_B_NO_BUILD_MODS"
+MODS="$MODS $G_B_MODS"
+
+# add more groups as needed
+#. $ROOT/mpm-myorg.conf
+#EXTRA_MODS="$EXTRA_MODS $MYORG_EXTRA_MODS"
+#CLONE_MODS="$CLONE_MODS $MYORG_CLONE_MODS"
+#DEFAULT_MODS="$DEFAULT_MODS $MYORG_DEFAULT_MODS"
+#NO_BUILD_MODS="$NO_BUILD_MODS $MYORG_NO_BUILD_MODS"
+#MODS="$MODS $MYORG_MODS"
+
+# set to where main mpm script lives
+# one suggestion is a checkout as sibling of your dev dir
+. $ROOT/../mpm/bin/mpm
