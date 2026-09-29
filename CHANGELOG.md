@@ -42,6 +42,17 @@
   `npm-ls`, `ls-files`, `shortlog-sen`, and `tig`.
 - `grep` prints paths relative to the current directory so editors can open
   them, and exits like grep (0 match, 1 no match, 2 error).
+- `fetch` (`--prune`, `--all-remotes`, `--tags`) lists the repos that
+  received updates.
+- `push` only pushes repos that are ahead of their upstream.
+- `diff` (`--cached`, `--stat`, `--name-only`) only shows changed repos.
+  Replaces `diff` and `diffc`.
+- `branch` shows a table of repos with branches other than the current one.
+- `latest-tag` (alias `tags`) sorts tags by version, not text, and shows the
+  commits since the latest tag (`--unreleased` to filter).
+- `gc` reports `.git` sizes before and after, and the total saved.
+- `prune` (`--remote`) uses `git remote prune --dry-run` for dry runs.
+  Replaces `prune` and `prune-n`.
 
 ### Fixed
 - Arguments with spaces or shell metacharacters (for example

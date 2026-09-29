@@ -75,6 +75,13 @@ mpm [global options] <command> [options] [args...]
 | `status` / `st` | Compact table of repos that need attention (`--show-clean`, `--long`) |
 | `clone` | Clone missing repos |
 | `pull` | `git pull --ff-only`; skips dirty, detached, or untracked branches (`--rebase`, `--merge`) |
+| `fetch` | `git fetch` (`--prune`, `--all-remotes`, `--tags`) |
+| `push` | Push repos that are ahead of their upstream |
+| `diff` | Uncommitted changes (`--cached`, `--stat`, `--name-only`) |
+| `branch` | Repos with branches other than the current one (`--show-clean`, `--remote`) |
+| `latest-tag` / `tags` | Latest version tag and commits since it (`--unreleased`) |
+| `gc` | `git gc` with before/after sizes (`--aggressive`) |
+| `prune` | Remove stale remote tracking branches (`--remote`) |
 | `grep <git grep args>` | `git grep` everywhere, with output paths relative to the current directory |
 | `exec -- <cmd> [args]` | Run a command in each repo (`--shell`, `--prefix`, `-i/--interactive`, `--read-only`) |
 
