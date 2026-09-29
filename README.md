@@ -42,6 +42,10 @@ version: 1
 settings:
   jobs: 8          # repos processed in parallel
   protocol: ssh    # how "github:owner" sources expand: ssh or https
+aliases:           # your own commands; options around them are kept
+  up: pull --rebase
+  outdated: npm outdated
+  tig: [exec, --interactive, --, tig]
 ```
 
 ```yaml
@@ -100,6 +104,7 @@ mpm [global options] <command> [options] [args...]
 | `repo add\|rm\|enable\|disable\|tag\|show` | Edit repo entries (`repo add core foo --clone`) |
 | `group list\|add\|rm\|enable\|disable\|set\|tag` | Manage groups |
 | `config get\|set\|unset\|path\|validate\|edit` | Workspace settings (`config set jobs 16`) |
+| `doctor` | Find stray checkouts, missing clones, and origin URL mismatches |
 | `exec -- <cmd> [args]` | Run a command in each repo (`--shell`, `--prefix`, `-i/--interactive`, `--read-only`) |
 
 Global options: `-C/--workspace`, `-n/--dry-run`, `-j/--jobs`, `-v/--verbose`,

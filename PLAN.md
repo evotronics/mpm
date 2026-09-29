@@ -298,10 +298,11 @@ Key principles:
    `config get|set|unset|path|validate|edit`. Edits go through
    `ConfigEditor`, which uses the `yaml` Document API to keep comments,
    validates the resulting workspace before writing, and shows a unified diff
-   in dry run. Still to do: `doctor`.
+   in dry run. ✅ `doctor`.
 5. **Polish and release**: README, docs, completion, npm publish under the
    chosen scope.
-6. **Future**: `discover`, aliases, TUI, per-repo hooks or setup commands.
+6. **Future**: `discover`, TUI, per-repo hooks or setup commands, shell
+   completion. ✅ Aliases are done.
 
 ## 9. Migration from the bash version
 
@@ -340,5 +341,5 @@ Mapping, for hand conversion:
 - For `grep` and `exec`, mpm's options must come before the pass-through
   arguments. For `grep`, global options after the command name are long-only
   (`-n`, `-C`, `-v`, `-q` belong to `git grep`), and `--all` has no `-a`.
-- `user aliases` in `mpm.yaml` are accepted by the schema but not wired up
-  yet.
+- Aliases are expanded before commander parses argv, and only when the
+  command word is not a built-in, so aliases can never shadow built-ins.

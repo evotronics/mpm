@@ -3,7 +3,9 @@
   "title": "mpm workspace config (mpm.yaml)",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version"],
+  "required": [
+    "version"
+  ],
   "properties": {
     "version": {
       "description": "Config format version.",
@@ -20,18 +22,40 @@
         },
         "protocol": {
           "description": "How host shorthand sources (github:owner) expand.",
-          "enum": ["ssh", "https"]
+          "enum": [
+            "ssh",
+            "https"
+          ]
         },
         "layout": {
           "description": "Checkout layout. Only 'flat' is currently supported.",
-          "enum": ["flat"]
+          "enum": [
+            "flat"
+          ]
         }
       }
     },
     "aliases": {
-      "description": "User defined command aliases (not yet implemented).",
+      "description": "Command aliases: a command line as a string (split like a shell) or an array of arguments. Built-in commands take precedence.",
       "type": "object",
-      "additionalProperties": {"type": "string"}
+      "propertyNames": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        ]
+      }
     }
   }
 }

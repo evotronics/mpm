@@ -70,6 +70,13 @@
   - `config get|set|unset|path|validate|edit`. Bare setting names such as
     `jobs` are shorthand for `settings.jobs`. `edit` opens `$VISUAL` or
     `$EDITOR`, then validates.
+- `doctor` checks the workspace for directories that are not in the config
+  (with `repo add` suggestions), enabled repos that are not cloned, disabled
+  repos that are still checked out, paths that are not git checkouts, and
+  `origin` URLs that differ from the config.
+- Command aliases in `mpm.yaml` (`aliases: {up: pull --rebase}`), given as a
+  string or an argument array. Options and arguments around an alias are
+  kept. Built-in commands take precedence, and alias loops are reported.
 - Help lists commands in groups.
 
 ### Fixed
