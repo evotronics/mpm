@@ -290,8 +290,9 @@ Key principles:
    NDJSON renderers, TTY progress line.
 3. ✅ **First commands**: `init`, `list`, `status`,
    `grep`, `clone`, `pull`, `exec`.
-3b. ✅ **Remaining git parity**: `fetch`, `push`, `diff`, `branch`, `gc`,
-   `prune`, `latest-tag`. Still to do: `npm …`, `clean`.
+3b. ✅ **Remaining parity**: `fetch`, `push`, `diff`, `branch`, `gc`,
+   `prune`, `latest-tag`, `npm install|ci|update|rebuild|ls|outdated`,
+   `clean`. Nested subcommands are supported by the CLI builder.
 4. **Config mutation**: `repo …`, `group …`, `config …`, `doctor`. These
    need comment-preserving edits through the `yaml` Document API, with a
    diff in dry run.

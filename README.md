@@ -80,6 +80,8 @@ mpm [global options] <command> [options] [args...]
 | `diff` | Uncommitted changes (`--cached`, `--stat`, `--name-only`) |
 | `branch` | Repos with branches other than the current one (`--show-clean`, `--remote`) |
 | `latest-tag` / `tags` | Latest version tag and commits since it (`--unreleased`) |
+| `npm install\|ci\|update\|rebuild\|ls\|outdated` | npm tasks in repos with a `package.json` |
+| `clean` | Remove `node_modules` (`--ignored`: all git-ignored files) |
 | `gc` | `git gc` with before/after sizes (`--aggressive`) |
 | `prune` | Remove stale remote tracking branches (`--remote`) |
 | `grep <git grep args>` | `git grep` everywhere, with output paths relative to the current directory |

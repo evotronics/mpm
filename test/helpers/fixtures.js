@@ -93,10 +93,12 @@ export async function writeFiles(dir, files) {
  * @param {object} options.groups - Map of group id to group config; string
  *   repo entries also get a remote created.
  * @param {object} [options.settings] - Workspace settings.
+ * @param {object} [options.files] - Map of repo name to files for its
+ *   remote's initial commit.
  *
  * @returns {Promise<{root: string, ws: string, remotes: string}>} Paths.
  */
-export async function createWorkspace({groups, settings = {}}) {
+export async function createWorkspace({groups, settings = {}, files = {}}) {
   const root = await tempDir();
   const remotes = path.join(root, 'remotes');
   const ws = path.join(root, 'ws');
@@ -112,7 +114,7 @@ export async function createWorkspace({groups, settings = {}}) {
       const name = typeof entry === 'string' ? entry : entry.name;
       if(!await fs.access(path.join(remotes, `${name}.git`)).then(
         () => true, () => false)) {
-        await createRemote(remotes, name);
+        await createRemote(remotes, name, files[name]);
       }
     }
     const config = {source: remotes, ...group};

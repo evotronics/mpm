@@ -39,7 +39,7 @@
 - `list` command.
 - `exec` command to run any command in each repo (`--shell`, `--prefix`,
   `--interactive`, `--read-only`), replacing one-off commands such as
-  `npm-ls`, `ls-files`, `shortlog-sen`, and `tig`.
+  `ls-files`, `shortlog-sen`, and `tig`.
 - `grep` prints paths relative to the current directory so editors can open
   them, and exits like grep (0 match, 1 no match, 2 error).
 - `fetch` (`--prune`, `--all-remotes`, `--tags`) lists the repos that
@@ -53,6 +53,11 @@
 - `gc` reports `.git` sizes before and after, and the total saved.
 - `prune` (`--remote`) uses `git remote prune --dry-run` for dry runs.
   Replaces `prune` and `prune-n`.
+- `npm` command group: `install`, `ci`, `update`, `rebuild`, `ls`, and
+  `outdated` (a combined table of outdated packages across repos). Repos
+  without a `package.json` are skipped.
+- `clean` removes `node_modules` with sizes shown, or with `--ignored` runs
+  `git clean -fdX` (previewed with `git clean --dry-run` under `-n`).
 
 ### Fixed
 - Arguments with spaces or shell metacharacters (for example
@@ -64,6 +69,10 @@
 
 ### Removed
 - **BREAKING**: `bower` and `bower-ls` commands.
+- **BREAKING**: The `npm` command's "install if `node_modules` is missing,
+  otherwise update" behavior. Use `mpm npm install` or `mpm npm update`.
+  `npm-ls`, `npm-outdated`, and `npm-rebuild` are now `mpm npm ls`,
+  `mpm npm outdated`, and `mpm npm rebuild`.
 
 ## Classic bash version
 
