@@ -100,7 +100,7 @@ mpm [global options] <command> [options] [args...]
 |---|---|
 | `init [dir]` | Create `mpm.yaml` and `mpm.d/` |
 | `list` / `ls` | List repos (`--names`, `--paths`, `-l` for URLs) |
-| `status` / `st` | Compact table of repos that need attention (`--show-clean`, `--long`) |
+| `status` / `st` | Compact table of repos that need attention (`--fetch`, `--show-clean`, `--long`) |
 | `clone` | Clone missing repos |
 | `pull` | `git pull --ff-only`; skips dirty, detached, or untracked branches (`--rebase`, `--merge`) |
 | `fetch` | `git fetch` (`--prune`, `--all-remotes`, `--tags`) |

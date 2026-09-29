@@ -84,6 +84,9 @@
   `MPM_PROTOCOL`, workspace `mpm.yaml`, user config, then defaults.
   `config get --show-origin` shows where values come from, and
   `config set|unset|edit --user` edit the user config.
+- `status --fetch` (`-f`) fetches before showing status so ahead/behind
+  counts are current. Repos whose fetch fails still show their local
+  status, marked `fetch failed`.
 - Shell completion for bash, zsh, and fish (`mpm completion <shell>`),
   covering commands, options, repo names, group ids, tags (including inside
   tag expressions), config keys, and aliases.

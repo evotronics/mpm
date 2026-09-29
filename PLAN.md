@@ -345,8 +345,9 @@ Mapping, for hand conversion:
   (`MPM_PROTOCOL`), so shared group files work for ssh and https users.
 - Parallel `git` runs set `GIT_TERMINAL_PROMPT=0` so HTTPS credential prompts
   fail instead of hanging. ssh passphrase prompts still need an agent.
-- `status` does not fetch, so ↓N is only as fresh as the last fetch. Add
-  `fetch` and maybe `status --fetch`.
+- ✅ `status` does not fetch by default, so ↓N is only as fresh as the last
+  fetch; `status --fetch` (`-f`) fetches first. A failed fetch still shows
+  the local status, marked `fetch failed`, and exits 1.
 - For `grep` and `exec`, mpm's options must come before the pass-through
   arguments. For `grep`, global options after the command name are long-only
   (`-n`, `-C`, `-v`, `-q` belong to `git grep`), and `--all` has no `-a`.

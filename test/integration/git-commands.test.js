@@ -28,6 +28,37 @@ describe('git commands', () => {
     expect(result.stdout).toMatch(/alpha\s+main\s+↓1/);
   });
 
+  it('fetches before showing status with --fetch', async () => {
+    await pushCommit(remotes, 'beta', {'new.txt': 'x\n'});
+    let result = await run(['status'], {cwd: ws});
+    expect(result.stdout).toBe('2 repos: 2 clean\n');
+
+    result = await run(['-n', 'status', '--fetch'], {cwd: ws});
+    expect(result.stderr).toMatch(/Dry run: not fetching/);
+    expect(result.stdout).toBe('2 repos: 2 clean\n');
+
+    result = await run(['status', '--fetch'], {cwd: ws});
+    expect(result.code).toBe(0);
+    expect(result.stdout).toMatch(/beta\s+main\s+↓1/);
+    expect(result.stdout).toMatch(/2 repos: 1 clean, 1 changed\n$/);
+  });
+
+  it('keeps local status when a fetch fails', async () => {
+    await git(path.join(ws, 'alpha'), 'remote', 'set-url', 'origin',
+      path.join(remotes, 'gone.git'));
+    await writeFiles(path.join(ws, 'alpha'), {'README.md': 'changed\n'});
+    const result = await run(['status', '-f'], {cwd: ws});
+    expect(result.code).toBe(1);
+    expect(result.stdout).toMatch(/alpha\s+main\s+M1 fetch failed/);
+    expect(result.stdout).toMatch(
+      /2 repos: 1 clean, 1 changed, 1 fetch failed\nFetch failed:\n/);
+    expect(result.stdout).toMatch(
+      / {2}alpha: `git fetch --quiet` exited with code/);
+    const json = await run(['--json', 'status', '-f', 'alpha'], {cwd: ws});
+    expect(JSON.parse(json.stdout).results[0].data.fetchError)
+      .toMatch(/git fetch/);
+  });
+
   it('pushes repos that are ahead', async () => {
     const alpha = path.join(ws, 'alpha');
     await writeFiles(alpha, {'local.txt': 'l\n'});
