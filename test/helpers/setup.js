@@ -1,5 +1,5 @@
 /**
- * Isolate tests from the user's git configuration.
+ * Isolate tests from the user's git and mpm configuration.
  */
 import {afterAll} from 'vitest';
 import fs from 'node:fs';
@@ -20,6 +20,10 @@ fs.writeFileSync(config, `[user]
 process.env.GIT_CONFIG_GLOBAL = config;
 process.env.GIT_CONFIG_NOSYSTEM = '1';
 delete process.env.MPM_WORKSPACE;
+delete process.env.MPM_PROTOCOL;
+delete process.env.MPM_USER_CONFIG;
+// never read the developer's own ~/.config/mpm
+process.env.XDG_CONFIG_HOME = path.join(dir, 'config');
 
 afterAll(async () => {
   await removeTempDirs();

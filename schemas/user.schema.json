@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mpm user config (~/.config/mpm/config.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "description": "Config format version.",
+      "const": 1
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "jobs": {
+          "description": "Default number of repos to process in parallel.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "protocol": {
+          "description": "How host shorthand sources (github:owner) expand.",
+          "enum": [
+            "ssh",
+            "https"
+          ]
+        }
+      }
+    },
+    "aliases": {
+      "description": "Command aliases for all workspaces. A workspace alias with the same name takes precedence.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        ]
+      }
+    }
+  }
+}

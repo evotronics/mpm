@@ -78,6 +78,12 @@
   string or an argument array. Options and arguments around an alias are
   kept. Built-in commands take precedence, and alias loops are reported.
 - Help lists commands in groups.
+- User config (`~/.config/mpm/config.yaml`, following `XDG_CONFIG_HOME`, or
+  `MPM_USER_CONFIG`) for personal `protocol` and `jobs` settings and aliases
+  across workspaces. `MPM_PROTOCOL` overrides the protocol. Precedence is
+  `MPM_PROTOCOL`, workspace `mpm.yaml`, user config, then defaults.
+  `config get --show-origin` shows where values come from, and
+  `config set|unset|edit --user` edit the user config.
 
 ### Fixed
 - Arguments with spaces or shell metacharacters (for example

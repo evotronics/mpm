@@ -86,9 +86,15 @@ milestones 1–3 are implemented (see §8). Decisions are marked
   *every* command, including grep and status of existing checkouts, unless
   named explicitly or `--all` is passed.
 - **Selection**: which repos a command acts on (see §6).
-- **User config** (🟡 `~/.config/mpm/config.yaml`, XDG): personal preferences
-  such as clone protocol (ssh/https), default jobs, color, and a default
-  workspace.
+- ✅ **User config** (`$XDG_CONFIG_HOME/mpm/config.yaml`, default
+  `~/.config/mpm/config.yaml`, or `MPM_USER_CONFIG`): personal `settings`
+  (`protocol`, `jobs`) and `aliases` for all workspaces. Precedence, highest
+  first, like git: `MPM_PROTOCOL`, workspace `mpm.yaml`, user config,
+  defaults. `init` leaves settings commented out, so the user config applies
+  unless a workspace sets them. `config get --show-origin` shows where each
+  value comes from; `config set|unset|edit --user` edit the user config,
+  also outside a workspace. (A default workspace and color preference are
+  possible later additions.)
 
 ## 5. Config format
 
@@ -331,9 +337,8 @@ Mapping, for hand conversion:
 
 ## 11. Implementation notes (for later milestones)
 
-- The `github:` protocol is currently a workspace setting. A per-user
-  override (user config or `MPM_PROTOCOL`) is needed when a workspace config
-  is shared between people who use different protocols.
+- ✅ The `github:` protocol can be set per user (user config) or per shell
+  (`MPM_PROTOCOL`), so shared group files work for ssh and https users.
 - Parallel `git` runs set `GIT_TERMINAL_PROMPT=0` so HTTPS credential prompts
   fail instead of hanging. ssh passphrase prompts still need an agent.
 - `status` does not fetch, so ↓N is only as fresh as the last fetch. Add

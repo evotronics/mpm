@@ -48,6 +48,18 @@ aliases:           # your own commands; options around them are kept
   tig: [exec, --interactive, --, tig]
 ```
 
+Personal defaults for all workspaces go in the user config,
+`~/.config/mpm/config.yaml` (or `$XDG_CONFIG_HOME/mpm/config.yaml`), which
+takes the same `settings` (`protocol`, `jobs`) and `aliases`. A workspace's
+`mpm.yaml` overrides it, and `MPM_PROTOCOL` overrides the protocol everywhere.
+This lets people who clone over https and people who use ssh share the same
+group files:
+
+```sh
+mpm config set --user protocol https   # or: export MPM_PROTOCOL=https
+mpm config get --show-origin           # where each setting comes from
+```
+
 ```yaml
 # mpm.d/core.yaml
 title: Example Org
