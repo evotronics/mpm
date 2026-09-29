@@ -293,9 +293,12 @@ Key principles:
 3b. ✅ **Remaining parity**: `fetch`, `push`, `diff`, `branch`, `gc`,
    `prune`, `latest-tag`, `npm install|ci|update|rebuild|ls|outdated`,
    `clean`. Nested subcommands are supported by the CLI builder.
-4. **Config mutation**: `repo …`, `group …`, `config …`, `doctor`. These
-   need comment-preserving edits through the `yaml` Document API, with a
-   diff in dry run.
+4. ✅ **Config mutation**: `repo add|rm|enable|disable|tag|show`,
+   `group list|add|rm|enable|disable|set|tag`,
+   `config get|set|unset|path|validate|edit`. Edits go through
+   `ConfigEditor`, which uses the `yaml` Document API to keep comments,
+   validates the resulting workspace before writing, and shows a unified diff
+   in dry run. Still to do: `doctor`.
 5. **Polish and release**: README, docs, completion, npm publish under the
    chosen scope.
 6. **Future**: `discover`, aliases, TUI, per-repo hooks or setup commands.

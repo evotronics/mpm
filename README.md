@@ -62,6 +62,18 @@ repos:
 A group can be turned off with `enabled: false`. Disabled repos and groups are
 skipped by every command unless they are named explicitly or `--all` is given.
 
+The files can be edited by hand or with commands that keep comments and
+formatting and validate before writing (add `-n` to see the diff first):
+
+```sh
+mpm repo add core new-module --clone
+mpm repo disable 'widget-old*'
+mpm repo tag 'widget-web-*' --add web
+mpm group add extras --source github:other-org --disabled
+mpm group enable extras
+mpm config set jobs 16
+```
+
 ## Usage
 
 ```
@@ -85,6 +97,9 @@ mpm [global options] <command> [options] [args...]
 | `gc` | `git gc` with before/after sizes (`--aggressive`) |
 | `prune` | Remove stale remote tracking branches (`--remote`) |
 | `grep <git grep args>` | `git grep` everywhere, with output paths relative to the current directory |
+| `repo add\|rm\|enable\|disable\|tag\|show` | Edit repo entries (`repo add core foo --clone`) |
+| `group list\|add\|rm\|enable\|disable\|set\|tag` | Manage groups |
+| `config get\|set\|unset\|path\|validate\|edit` | Workspace settings (`config set jobs 16`) |
 | `exec -- <cmd> [args]` | Run a command in each repo (`--shell`, `--prefix`, `-i/--interactive`, `--read-only`) |
 
 Global options: `-C/--workspace`, `-n/--dry-run`, `-j/--jobs`, `-v/--verbose`,

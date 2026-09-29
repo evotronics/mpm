@@ -58,6 +58,19 @@
   without a `package.json` are skipped.
 - `clean` removes `node_modules` with sizes shown, or with `--ignored` runs
   `git clean -fdX` (previewed with `git clean --dry-run` under `-n`).
+- Config editing commands. Files are edited in place, keeping comments and
+  entry order. The resulting config is validated before anything is written,
+  and `--dry-run` shows a unified diff.
+  - `repo add|rm|enable|disable|tag|show`. `repo add` inserts entries in
+    sorted order, stores URLs that match the group source as short names, and
+    can `--clone`. `repo rm --delete` refuses to delete checkouts with
+    uncommitted, untracked, stashed, or unpushed work unless `--force` is
+    given.
+  - `group list|add|rm|enable|disable|set|tag`.
+  - `config get|set|unset|path|validate|edit`. Bare setting names such as
+    `jobs` are shorthand for `settings.jobs`. `edit` opens `$VISUAL` or
+    `$EDITOR`, then validates.
+- Help lists commands in groups.
 
 ### Fixed
 - Arguments with spaces or shell metacharacters (for example
