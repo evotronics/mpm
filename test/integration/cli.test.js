@@ -37,20 +37,21 @@ describe('workspace discovery and config', () => {
     let result = await run(['list'], {cwd: ws});
     expect(result.code).toBe(2);
     expect(result.stderr).toMatch(
-      /mpm\.d\/h\.yaml: \/repos\/0: duplicate repo name "a"/);
+      /\.mpm\/groups\/h\.yaml: \/repos\/0: duplicate repo name "a"/);
 
-    await fs.writeFile(path.join(ws, 'mpm.d', 'h.yaml'), 'repos: [b\n');
+    const hFile = path.join(ws, '.mpm', 'groups', 'h.yaml');
+    await fs.writeFile(hFile, 'repos: [b\n');
     result = await run(['list'], {cwd: ws});
-    expect(result.stderr).toMatch(/Invalid YAML in "mpm\.d\/h\.yaml"/);
+    expect(result.stderr).toMatch(/Invalid YAML in "\.mpm\/groups\/h\.yaml"/);
 
-    await fs.writeFile(path.join(ws, 'mpm.d', 'h.yaml'), 'repo: [b]\n');
+    await fs.writeFile(hFile, 'repo: [b]\n');
     result = await run(['--json', 'list'], {cwd: ws});
     expect(result.code).toBe(2);
     const json = JSON.parse(result.stdout);
     expect(json.ok).toBe(false);
     expect(json.error.code).toBe('CONFIG_ERROR');
     expect(json.error.details).toEqual(
-      ['mpm.d/h.yaml: (top level): unknown property "repo"']);
+      ['.mpm/groups/h.yaml: (top level): unknown property "repo"']);
   });
 });
 
@@ -59,9 +60,10 @@ describe('init', () => {
     const dir = await tempDir();
     let result = await run(['init', '--protocol', 'https'], {cwd: dir});
     expect(result.code).toBe(0);
-    const text = await fs.readFile(path.join(dir, 'mpm.yaml'), 'utf8');
+    const text = await fs.readFile(path.join(dir, '.mpm', 'config.yaml'),
+      'utf8');
     expect(text).toMatch(/protocol: https/);
-    expect(await exists(path.join(dir, 'mpm.d'))).toBe(true);
+    expect(await exists(path.join(dir, '.mpm', 'groups'))).toBe(true);
     result = await run(['list'], {cwd: dir});
     expect(result.code).toBe(0);
     result = await run(['init'], {cwd: dir});
@@ -74,7 +76,7 @@ describe('init', () => {
     const result = await run(['-n', 'init', 'ws'], {cwd: dir});
     expect(result.code).toBe(0);
     expect(result.stdout).toBe(
-      `would write ${path.join(dir, 'ws', 'mpm.yaml')}\n` +
+      `would write ${path.join(dir, 'ws', '.mpm', 'config.yaml')}\n` +
       `would trust ${path.join(dir, 'ws')}\n`);
     expect(await exists(path.join(dir, 'ws'))).toBe(false);
   });

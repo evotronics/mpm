@@ -143,12 +143,13 @@ export async function createWorkspace({groups, settings = {}, files = {}}) {
   const remotes = path.join(root, 'remotes');
   const ws = path.join(root, 'ws');
   await fs.mkdir(remotes);
-  await fs.mkdir(path.join(ws, 'mpm.d'), {recursive: true});
+  await fs.mkdir(path.join(ws, '.mpm', 'groups'), {recursive: true});
   const lines = ['version: 1', 'settings:', '  jobs: 4'];
   for(const [key, value] of Object.entries(settings)) {
     lines.push(`  ${key}: ${value}`);
   }
-  await fs.writeFile(path.join(ws, 'mpm.yaml'), lines.join('\n') + '\n');
+  await fs.writeFile(path.join(ws, '.mpm', 'config.yaml'),
+    lines.join('\n') + '\n');
   await trustDir(ws);
   for(const [id, group] of Object.entries(groups)) {
     for(const entry of group.repos ?? []) {
@@ -159,7 +160,7 @@ export async function createWorkspace({groups, settings = {}, files = {}}) {
       }
     }
     const config = {source: remotes, ...group};
-    await fs.writeFile(path.join(ws, 'mpm.d', `${id}.yaml`),
+    await fs.writeFile(path.join(ws, '.mpm', 'groups', `${id}.yaml`),
       JSON.stringify(config, null, 2));
   }
   return {root, ws, remotes};

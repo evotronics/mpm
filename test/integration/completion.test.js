@@ -13,8 +13,8 @@ let ws;
 beforeAll(async () => {
   ws = await tempDir();
   await writeFiles(ws, {
-    'mpm.yaml': 'version: 1\naliases:\n  up: pull --rebase\n',
-    'mpm.d/core.yaml': [
+    '.mpm/config.yaml': 'version: 1\naliases:\n  up: pull --rebase\n',
+    '.mpm/groups/core.yaml': [
       'title: Example Org',
       'source: github:example-org',
       'tags: [core]',
@@ -26,7 +26,7 @@ beforeAll(async () => {
       '    tags: [archived]',
       ''
     ].join('\n'),
-    'mpm.d/extras.yaml': 'enabled: false\nrepos: [/srv/sample-data]\n'
+    '.mpm/groups/extras.yaml': 'enabled: false\nrepos: [/srv/sample-data]\n'
   });
   await trustDir(ws);
 });
@@ -124,7 +124,7 @@ t() {
 t mpm st
 t mpm status -g ''
 t mpm repo enable widget-
-t mpm exec -- mpm.
+t mpm exec -- .mp
 t mpm exec cat my
 `;
     const {stdout} = await execFileAsync('bash', ['-c', test], {
@@ -137,7 +137,7 @@ t mpm exec cat my
       'status',
       'core extras',
       'widget-old widget-web',
-      'mpm.d mpm.yaml',
+      '.mpm',
       'my notes.txt'
     ]);
   });

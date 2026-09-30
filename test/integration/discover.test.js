@@ -27,8 +27,8 @@ describe('discover', () => {
     await fs.symlink(FAKE_GH, path.join(ghDir, 'gh'));
     env = {PATH: `${ghDir}:${process.env.PATH}`, FAKE_GH_DIR: ghDir};
     await writeFiles(ws, {
-      'mpm.yaml': 'version: 1\n',
-      'mpm.d/core.yaml': [
+      '.mpm/config.yaml': 'version: 1\n',
+      '.mpm/groups/core.yaml': [
         '# Core repos.',
         'source: github:example-org',
         'repos:',
@@ -38,9 +38,9 @@ describe('discover', () => {
         '  - zeta',
         ''
       ].join('\n'),
-      'mpm.d/apps.yaml': 'source: git@github.com:other-org\n' +
+      '.mpm/groups/apps.yaml': 'source: git@github.com:other-org\n' +
         'repos: [tool-cli]\n',
-      'mpm.d/local.yaml': 'source: /srv/git\nrepos: [misc]\n'
+      '.mpm/groups/local.yaml': 'source: /srv/git\nrepos: [misc]\n'
     });
     await trustDir(ws);
     await writeFiles(ghDir, {
@@ -103,7 +103,7 @@ describe('discover', () => {
   });
 
   it('adds new repos to the group, with dry run', async () => {
-    const coreFile = path.join(ws, 'mpm.d', 'core.yaml');
+    const coreFile = path.join(ws, '.mpm', 'groups', 'core.yaml');
     const before = await fs.readFile(coreFile, 'utf8');
     let result = await run(['-n', 'discover', 'core', '--add', '-t', 'new'],
       {cwd: ws, env});
@@ -143,7 +143,7 @@ describe('discover', () => {
   });
 
   it('refuses to guess the group for a shared owner', async () => {
-    await fs.writeFile(path.join(ws, 'mpm.d', 'apps.yaml'),
+    await fs.writeFile(path.join(ws, '.mpm', 'groups', 'apps.yaml'),
       'source: github:example-org\nrepos: []\n');
     let result = await run(['discover', '--add'], {cwd: ws, env});
     expect(result.code).toBe(2);

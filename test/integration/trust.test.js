@@ -18,8 +18,8 @@ async function exists(file) {
 async function untrustedWorkspace() {
   const ws = await tempDir();
   await writeFiles(ws, {
-    'mpm.yaml': EVIL,
-    'mpm.d/core.yaml': 'source: /srv/git\nrepos: [widget]\n'
+    '.mpm/config.yaml': EVIL,
+    '.mpm/groups/core.yaml': 'source: /srv/git\nrepos: [widget]\n'
   });
   return ws;
 }
@@ -53,17 +53,17 @@ describe('workspace trust', () => {
     expect(completions.stdout).not.toMatch(/^up\t/m);
   });
 
-  it('skips an untrusted mpm.yaml inside a trusted workspace', async () => {
+  it('skips an untrusted config inside a trusted workspace', async () => {
     const {ws} = await createWorkspace({groups: {core: {repos: ['alpha']}}});
     await run(['clone'], {cwd: ws});
     const nested = path.join(ws, 'alpha');
-    await writeFiles(nested, {'mpm.yaml': EVIL});
+    await writeFiles(nested, {'.mpm/config.yaml': EVIL});
 
     let result = await run(['list', '--names'], {cwd: nested});
     expect(result.code).toBe(0);
     expect(result.stdout).toBe('alpha\n');
     expect(result.stderr).toMatch(
-      `Ignoring untrusted ${path.join(nested, 'mpm.yaml')}`);
+      `Ignoring untrusted ${path.join(nested, '.mpm', 'config.yaml')}`);
 
     result = await run(['up'], {cwd: nested});
     expect(result.code).toBe(2);
@@ -104,9 +104,9 @@ describe('workspace trust', () => {
       .toBe('widget\n');
   });
 
-  it('requires an mpm.yaml to trust', async () => {
+  it('requires a workspace config to trust', async () => {
     const result = await run(['trust'], {cwd: await tempDir()});
     expect(result.code).toBe(2);
-    expect(result.stderr).toMatch(/No "mpm\.yaml"/);
+    expect(result.stderr).toMatch(/No "\.mpm\/config\.yaml"/);
   });
 });

@@ -28,7 +28,7 @@ describe('config editing commands', () => {
       core: {repos: ['alpha', 'gamma']}
     }}));
     await createRemote(remotes, 'beta');
-    coreFile = path.join(ws, 'mpm.d', 'core.yaml');
+    coreFile = path.join(ws, '.mpm', 'groups', 'core.yaml');
     await fs.writeFile(coreFile, CORE_YAML(remotes));
   });
 
@@ -163,7 +163,7 @@ repos:
       let result = await run(['group', 'add', 'extras', '--source',
         'github:other-org', '-t', 'extras', '--disabled'], {cwd: ws});
       expect(result.code).toBe(0);
-      const extrasFile = path.join(ws, 'mpm.d', 'extras.yaml');
+      const extrasFile = path.join(ws, '.mpm', 'groups', 'extras.yaml');
       expect(await fs.readFile(extrasFile, 'utf8')).toBe(
         'source: github:other-org\nenabled: false\ntags: [extras]\n' +
         'repos: []\n');
@@ -204,7 +204,8 @@ repos:
   });
 
   describe('config', () => {
-    const configFile = () => fs.readFile(path.join(ws, 'mpm.yaml'), 'utf8');
+    const configFile = () =>
+      fs.readFile(path.join(ws, '.mpm', 'config.yaml'), 'utf8');
 
     it('gets, sets, and unsets settings with validation', async () => {
       let result = await run(['config', 'get', 'protocol'], {cwd: ws});
@@ -243,7 +244,7 @@ repos:
       let result = await run(['config', 'edit', 'core'],
         {cwd: ws, env: {EDITOR: 'true', VISUAL: ''}});
       expect(result.code).toBe(0);
-      expect(result.stdout).toBe('mpm.d/core.yaml is valid\n');
+      expect(result.stdout).toBe('.mpm/groups/core.yaml is valid\n');
 
       result = await run(['config', 'edit'], {cwd: ws, env: {
         VISUAL: '', EDITOR: 'sh -c \'echo "bogus: 1" >> "$0"\''

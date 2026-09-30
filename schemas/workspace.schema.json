@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "mpm workspace config (mpm.yaml)",
+  "title": "mpm workspace config (.mpm/config.yaml)",
   "type": "object",
   "additionalProperties": false,
   "required": [

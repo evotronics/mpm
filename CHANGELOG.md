@@ -6,8 +6,9 @@
 - **BREAKING**: Rewrite in JavaScript (Node.js >= 22) as a single installable
   `mpm` command (also installed as `multiple-project-manager`). The per-group
   `mpm-GROUP` wrapper scripts are no longer needed: use `mpm -g GROUP ...`.
-- **BREAKING**: New YAML config. A workspace is a directory with `mpm.yaml`
-  (settings) and `mpm.d/GROUP.yaml` files (one per group). Config files are
+- **BREAKING**: New YAML config. A workspace is a directory with a hidden
+  `.mpm/` config directory: `.mpm/config.yaml` (settings) and
+  `.mpm/groups/GROUP.yaml` files (one per group). Config files are
   validated against JSON Schemas in `schemas/`. The workspace is found from
   any directory inside it, so `./mpm` / `../mpm` path juggling is gone.
   Existing `mpm-GROUP.conf` configs must be converted by hand.
@@ -74,22 +75,22 @@
   (with `repo add` suggestions), enabled repos that are not cloned, disabled
   repos that are still checked out, paths that are not git checkouts, and
   `origin` URLs that differ from the config.
-- Command aliases in `mpm.yaml` (`aliases: {up: pull --rebase}`), given as a
-  string or an argument array. Options and arguments around an alias are
+- Command aliases in `.mpm/config.yaml` (`aliases: {up: pull --rebase}`),
+  given as a string or an argument array. Options and arguments around an alias are
   kept. Built-in commands take precedence, and alias loops are reported.
 - Help lists commands in groups.
 - User config (`~/.config/mpm/config.yaml`, following `XDG_CONFIG_HOME`, or
   `MPM_USER_CONFIG`) for personal `protocol` and `jobs` settings and aliases
   across workspaces. `MPM_PROTOCOL` overrides the protocol. Precedence is
-  `MPM_PROTOCOL`, workspace `mpm.yaml`, user config, then defaults.
+  `MPM_PROTOCOL`, workspace `.mpm/config.yaml`, user config, then defaults.
   `config get --show-origin` shows where values come from, and
   `config set|unset|edit --user` edit the user config.
 - `--dirty` selects repos with uncommitted changes or untracked files,
   for example `mpm diff --dirty` or `mpm exec --dirty -- git stash`.
 - Workspace trust. A workspace config can run commands through aliases, so
-  an `mpm.yaml` found by walking up from the current directory is only
+  a `.mpm/config.yaml` found by walking up from the current directory is only
   loaded if its directory is in the user config's `trusted` list. This stops
-  an `mpm.yaml` inside a cloned repo from taking over. Untrusted configs
+  a `.mpm/config.yaml` inside a cloned repo from taking over. Untrusted configs
   are skipped with a notice (a trusted parent workspace is used instead)
   or cause an error. `mpm trust [dir]` (showing the workspace's aliases for
   review) and `mpm untrust [dir]` manage the list; `mpm init` trusts new

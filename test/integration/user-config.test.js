@@ -15,8 +15,8 @@ describe('user config and protocol override', () => {
     env = {XDG_CONFIG_HOME: path.join(dir, 'config'), MPM_WORKSPACE: ws};
     userFile = path.join(dir, 'config', 'mpm', 'config.yaml');
     await writeFiles(ws, {
-      'mpm.yaml': 'version: 1\n',
-      'mpm.d/core.yaml': 'source: github:example-org\nrepos: [widget]\n'
+      '.mpm/config.yaml': 'version: 1\n',
+      '.mpm/groups/core.yaml': 'source: github:example-org\nrepos: [widget]\n'
     });
   });
 
@@ -34,7 +34,7 @@ describe('user config and protocol override', () => {
       {'config.yaml': 'version: 1\nsettings:\n  protocol: https\n'});
     expect(await url()).toBe('https://github.com/example-org/widget.git');
 
-    await fs.appendFile(path.join(ws, 'mpm.yaml'),
+    await fs.appendFile(path.join(ws, '.mpm', 'config.yaml'),
       'settings:\n  protocol: ssh\n');
     expect(await url()).toBe('git@github.com:example-org/widget.git');
 
@@ -120,7 +120,7 @@ describe('user config and protocol override', () => {
       let result = await run(['names'], {cwd: ws, env});
       expect(result.stdout).toBe('widget\n');
 
-      await fs.appendFile(path.join(ws, 'mpm.yaml'),
+      await fs.appendFile(path.join(ws, '.mpm', 'config.yaml'),
         'aliases:\n  names: list --paths\n');
       result = await run(['names'], {cwd: ws, env});
       expect(result.stdout).toBe(`${path.join(ws, 'widget')}\n`);

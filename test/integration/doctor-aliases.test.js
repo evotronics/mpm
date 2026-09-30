@@ -17,7 +17,8 @@ describe('doctor', () => {
     await run(['clone'], {cwd: ws});
     const result = await run(['doctor'], {cwd: ws});
     expect(result.code).toBe(0);
-    expect(result.stdout).toBe('✓ no problems found in 3 repos (mpm.yaml)\n');
+    expect(result.stdout).toBe(
+      '✓ no problems found in 3 repos (.mpm/config.yaml)\n');
   });
 
   it('finds workspace problems', async () => {
@@ -49,7 +50,7 @@ describe('doctor', () => {
   });
 
   it('treats protocol-only origin differences as notes', async () => {
-    await fs.writeFile(path.join(ws, 'mpm.d', 'g.yaml'),
+    await fs.writeFile(path.join(ws, '.mpm', 'groups', 'g.yaml'),
       'source: github:example\nrepos: [alpha]\n');
     await fs.mkdir(path.join(ws, 'alpha'));
     await git(path.join(ws, 'alpha'), 'init', '-q');
@@ -67,7 +68,7 @@ describe('aliases', () => {
 
   beforeEach(async () => {
     ({ws} = await createWorkspace({groups: {g: {repos: ['alpha', 'beta']}}}));
-    await fs.appendFile(path.join(ws, 'mpm.yaml'), [
+    await fs.appendFile(path.join(ws, '.mpm', 'config.yaml'), [
       'aliases:',
       '  names: list --names',
       '  hello: exec --read-only --prefix -- sh -c "echo hi $MPM_REPO"',

@@ -67,13 +67,13 @@ milestones 1–3 are implemented (see §8). Decisions are marked
 ## 4. Core concepts
 
 - **Workspace**: the big directory holding all the checkouts. It is marked by
-  `mpm.yaml` at its root. Found by `--workspace/-C`, then `$MPM_WORKSPACE`,
-  then walking up from cwd. So `mpm status` works from the workspace root *or
-  from inside any repo* in it.
+  `.mpm/config.yaml` at its root. Found by `--workspace/-C`, then
+  `$MPM_WORKSPACE`, then walking up from cwd. So `mpm status` works from the
+  workspace root *or from inside any repo* in it.
   - ✅ Workspaces are independent; there is no global registry. Use multiple
     workspaces as needed.
   - ✅ **Trust**: a workspace config can run commands (aliases, and hooks
-    later), so an `mpm.yaml` found by walking up is only used if its
+    later), so a `.mpm/config.yaml` found by walking up is only used if its
     directory is in the user config's `trusted` list (by real path, like
     git `safe.directory`). Untrusted configs are skipped with a notice in
     favor of a trusted parent, or cause an error naming `mpm trust <dir>`.
@@ -96,7 +96,7 @@ milestones 1–3 are implemented (see §8). Decisions are marked
 - ✅ **User config** (`$XDG_CONFIG_HOME/mpm/config.yaml`, default
   `~/.config/mpm/config.yaml`, or `MPM_USER_CONFIG`): personal `settings`
   (`protocol`, `jobs`) and `aliases` for all workspaces. Precedence, highest
-  first, like git: `MPM_PROTOCOL`, workspace `mpm.yaml`, user config,
+  first, like git: `MPM_PROTOCOL`, workspace `.mpm/config.yaml`, user config,
   defaults. `init` leaves settings commented out, so the user config applies
   unless a workspace sets them. `config get --show-origin` shows where each
   value comes from; `config set|unset|edit --user` edit the user config,
@@ -105,16 +105,21 @@ milestones 1–3 are implemented (see §8). Decisions are marked
 
 ## 5. Config format
 
-✅ The workspace root holds `mpm.yaml` (settings and aliases) plus
-`mpm.d/*.yaml`, one file per group, loaded by glob. The file name is the group
-id. Groups load in file-name order; repos appear in file order.
+✅ All workspace config lives in a hidden `.mpm/` directory at the root:
+`.mpm/config.yaml` (settings and aliases) plus `.mpm/groups/*.yaml`, one file
+per group, loaded by glob. The file name is the group id. Groups load in
+file-name order; repos appear in file order. (This replaced `mpm.yaml` plus
+`mpm.d/` at the root before the first release: the root stays clean among
+hundreds of checkouts, `.mpm/` can be its own git repo to share group files,
+and it leaves room for future state such as a cache.)
 
 ```
 ~/projects/dev/
-  mpm.yaml
-  mpm.d/
-    core.yaml
-    apps.yaml
+  .mpm/
+    config.yaml
+    groups/
+      core.yaml
+      apps.yaml
     extras.yaml    # enabled: false
   widget/
   widget-account/
@@ -122,7 +127,7 @@ id. Groups load in file-name order; repos appear in file order.
 ```
 
 ```yaml
-# mpm.yaml
+# .mpm/config.yaml
 # yaml-language-server: $schema=https://…/mpm.schema.json
 version: 1
 settings:
@@ -134,7 +139,7 @@ aliases:                  # (later milestone)
 ```
 
 ```yaml
-# mpm.d/core.yaml
+# .mpm/groups/core.yaml
 title: Example Org
 source: github:example-org     # or git@github.com:example-org / https://…
 enabled: true
@@ -232,9 +237,9 @@ Repo operations (parallel unless noted):
   …) is covered by `exec` and user aliases instead of built-ins.
 
 Config management (all support `--dry-run`, which prints a unified diff of
-`mpm.yaml`):
+`.mpm/config.yaml`):
 
-- `init`: create `mpm.yaml` and `mpm.d/`.
+- `init`: create `.mpm/config.yaml` and `.mpm/groups/`.
 - `list` / `ls`: repos with group, tags, enabled, and cloned state.
 - `repo add <group> <ref…> [--tag t] [--disabled] [--clone]`
 - `repo rm <name…> [--delete-checkout]`

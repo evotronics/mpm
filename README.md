@@ -20,19 +20,25 @@ cd ~/src/mpm && npm install && npm link   # provides `mpm`
 
 ## Workspace layout
 
-A workspace is a directory with an `mpm.yaml` file. Repo groups are defined in
-`mpm.d/<group>.yaml`, and repos are checked out directly in the workspace:
+A workspace is a directory with a hidden `.mpm/` config directory:
+`.mpm/config.yaml` for settings and `.mpm/groups/<group>.yaml` for repo groups.
+Repos are checked out directly in the workspace, so the config stays out of
+the way:
 
 ```
 ~/projects/dev/
-  mpm.yaml
-  mpm.d/
-    core.yaml
-    apps.yaml
+  .mpm/
+    config.yaml
+    groups/
+      core.yaml
+      apps.yaml
   widget/
   widget-account/
   tool-cli/
 ```
+
+`.mpm/` can be its own git repository, for example to share group files with a
+team.
 
 `mpm` finds the workspace from any directory inside it, including from inside
 a repo, once the workspace is trusted (see
@@ -40,7 +46,7 @@ a repo, once the workspace is trusted (see
 `-C <dir>` or `MPM_WORKSPACE`.
 
 ```yaml
-# mpm.yaml
+# .mpm/config.yaml
 version: 1
 settings:
   jobs: 8          # repos processed in parallel
@@ -54,7 +60,8 @@ aliases:           # your own commands; options around them are kept
 Personal defaults for all workspaces go in the user config,
 `~/.config/mpm/config.yaml` (or `$XDG_CONFIG_HOME/mpm/config.yaml`), which
 takes the same `settings` (`protocol`, `jobs`) and `aliases`. A workspace's
-`mpm.yaml` overrides it, and `MPM_PROTOCOL` overrides the protocol everywhere.
+`.mpm/config.yaml` overrides it, and `MPM_PROTOCOL` overrides the protocol
+everywhere.
 This lets people who clone over https and people who use ssh share the same
 group files:
 
@@ -64,7 +71,7 @@ mpm config get --show-origin           # where each setting comes from
 ```
 
 ```yaml
-# mpm.d/core.yaml
+# .mpm/groups/core.yaml
 title: Example Org
 source: github:example-org  # or git@host:owner, https://host/owner, /local/dir
 tags: [core]
@@ -103,7 +110,7 @@ mpm [global options] <command> [options] [args...]
 
 | Command | Description |
 |---|---|
-| `init [dir]` | Create `mpm.yaml` and `mpm.d/` |
+| `init [dir]` | Create `.mpm/config.yaml` and `.mpm/groups/` |
 | `list` / `ls` | List repos (`--names`, `--paths`, `-l` for URLs) |
 | `status` / `st` | Compact table of repos that need attention (`--fetch`, `--show-clean`, `--long`) |
 | `clone` | Clone missing repos |
@@ -121,7 +128,7 @@ mpm [global options] <command> [options] [args...]
 | `repo add\|rm\|enable\|disable\|tag\|show` | Edit repo entries (`repo add core foo --clone`) |
 | `group list\|add\|rm\|enable\|disable\|set\|tag` | Manage groups |
 | `config get\|set\|unset\|path\|validate\|edit` | Workspace settings (`config set jobs 16`) |
-| `trust [dir]` / `untrust [dir]` | Allow a workspace's `mpm.yaml` to be loaded automatically |
+| `trust [dir]` / `untrust [dir]` | Allow a workspace's `.mpm/config.yaml` to be loaded automatically |
 | `doctor` | Find stray checkouts, missing clones, and origin URL mismatches |
 | `discover [groups...]` | Find GitHub repos not in the config yet, via `gh` (`--add`, `--clone`) |
 | `completion bash\|zsh\|fish` | Print a shell completion script |
@@ -165,11 +172,11 @@ long forms of global options (`--dry-run`, `--json`, ...), or put them before
 
 ## Trusted workspaces
 
-A workspace config can run commands through aliases, so an `mpm.yaml` found by
-walking up from the current directory is only used if its directory is
-trusted. Otherwise a cloned repo containing an `mpm.yaml` could take over
-whenever you run `mpm` inside it. Untrusted configs are skipped with a notice,
-and mpm keeps looking for a trusted workspace further up.
+A workspace config can run commands through aliases, so a `.mpm/config.yaml`
+found by walking up from the current directory is only used if its directory
+is trusted. Otherwise a cloned repo containing a `.mpm/config.yaml` could take
+over whenever you run `mpm` inside it. Untrusted configs are skipped with a
+notice, and mpm keeps looking for a trusted workspace further up.
 
 `mpm init` trusts the workspace it creates. For an existing one:
 
