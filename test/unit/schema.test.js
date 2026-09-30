@@ -27,4 +27,22 @@ describe('validateConfig', () => {
       '/repos/2: must be string or object'
     ]);
   });
+
+  it('rejects control characters and a .git repo name', () => {
+    expect(validateConfig('group', {
+      title: 'evil\u001b[2J',
+      repos: [{name: '.git'}, {name: '.github'}, 'ok',
+        {url: 'x\u0007', name: 'y'}]
+    })).toEqual([
+      '/repos/0/name: is not allowed',
+      '/repos/3/url: must not contain control characters',
+      '/title: must not contain control characters'
+    ]);
+    expect(validateConfig('workspace', {
+      version: 1, aliases: {up: 'pull\n--rebase', ok: ['a\u009b']}
+    })).toEqual([
+      '/aliases/ok/0: must not contain control characters',
+      '/aliases/up: must not contain control characters'
+    ]);
+  });
 });

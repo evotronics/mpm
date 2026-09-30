@@ -82,6 +82,14 @@ describe('discover', () => {
     ]);
   });
 
+  it('escapes control characters in GitHub descriptions', async () => {
+    await writeFiles(ghDir, {'example-org.json': upstream('example-org',
+      [{name: 'widget-evil', description: 'hi\u001b[2J'}])});
+    const result = await run(['discover', 'core'], {cwd: ws, env});
+    expect(result.stdout).toMatch(/\+ widget-evil {2}hi\\x1b\[2J/);
+    expect(result.stdout).not.toMatch('\u001b');
+  });
+
   it('includes archived repos and forks on request, as JSON', async () => {
     const result = await run(['--json', 'discover', 'core', '--archived',
       '--forks'], {cwd: ws, env});

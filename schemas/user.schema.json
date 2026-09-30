@@ -36,12 +36,14 @@
         "oneOf": [
           {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f]*$"
           },
           {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f]*$"
             },
             "minItems": 1
           }
@@ -53,7 +55,8 @@
       "type": "array",
       "items": {
         "type": "string",
-        "minLength": 1
+        "minLength": 1,
+        "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f]*$"
       },
       "uniqueItems": true
     }

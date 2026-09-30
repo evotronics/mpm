@@ -94,6 +94,11 @@
   or cause an error. `mpm trust [dir]` (showing the workspace's aliases for
   review) and `mpm untrust [dir]` manage the list; `mpm init` trusts new
   workspaces; `-C` and `MPM_WORKSPACE` are always honored.
+- Config strings (titles, descriptions, sources, URLs, aliases, trusted
+  paths) may not contain control characters, and text from outside mpm
+  (GitHub descriptions in `discover`, `origin` URLs in `doctor`) is printed
+  with control characters escaped, so nothing can inject terminal escape
+  sequences. `.git` is rejected as a repo name.
 - `discover` lists repos in each group's GitHub owner (via the GitHub CLI,
   `gh`) that are not in the config yet, plus name conflicts, configured
   repos gone upstream, and repos archived upstream but still enabled.
