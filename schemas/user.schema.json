@@ -47,6 +47,15 @@
           }
         ]
       }
+    },
+    "trusted": {
+      "description": "Workspace directories whose mpm.yaml may be loaded automatically when found by walking up from the current directory. Managed with `mpm trust` and `mpm untrust`.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
     }
   }
 }

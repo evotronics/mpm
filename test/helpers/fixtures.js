@@ -8,6 +8,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {promisify} from 'node:util';
 import {Writable} from 'node:stream';
+import YAML from 'yaml';
 
 const execFileAsync = promisify(execFile);
 
@@ -100,7 +101,33 @@ export async function writeFiles(dir, files) {
 }
 
 /**
- * Create a workspace with groups of repos backed by local remotes.
+ * Add a directory to the trusted workspaces in a user config file, keeping
+ * whatever else is in it.
+ *
+ * @param {string} dir - Workspace directory.
+ * @param {object} [options] - Options.
+ * @param {string} [options.configHome] - XDG config home (default: the
+ *   test environment's).
+ */
+export async function trustDir(dir, {
+  configHome = process.env.XDG_CONFIG_HOME
+} = {}) {
+  const file = path.join(configHome, 'mpm', 'config.yaml');
+  let data = {version: 1};
+  try {
+    data = YAML.parse(await fs.readFile(file, 'utf8')) ?? data;
+  } catch(e) {
+    if(e.code !== 'ENOENT') {
+      throw e;
+    }
+  }
+  data.trusted = [...new Set([...data.trusted ?? [], dir])];
+  await fs.mkdir(path.dirname(file), {recursive: true});
+  await fs.writeFile(file, YAML.stringify(data));
+}
+
+/**
+ * Create a trusted workspace with groups of repos backed by local remotes.
  *
  * @param {object} options - Options.
  * @param {object} options.groups - Map of group id to group config; string
@@ -122,6 +149,7 @@ export async function createWorkspace({groups, settings = {}, files = {}}) {
     lines.push(`  ${key}: ${value}`);
   }
   await fs.writeFile(path.join(ws, 'mpm.yaml'), lines.join('\n') + '\n');
+  await trustDir(ws);
   for(const [id, group] of Object.entries(groups)) {
     for(const entry of group.repos ?? []) {
       const name = typeof entry === 'string' ? entry : entry.name;

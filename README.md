@@ -34,7 +34,9 @@ A workspace is a directory with an `mpm.yaml` file. Repo groups are defined in
 ```
 
 `mpm` finds the workspace from any directory inside it, including from inside
-a repo. It can also be chosen with `-C <dir>` or `MPM_WORKSPACE`.
+a repo, once the workspace is trusted (see
+[Trusted workspaces](#trusted-workspaces)). It can also be chosen with
+`-C <dir>` or `MPM_WORKSPACE`.
 
 ```yaml
 # mpm.yaml
@@ -118,6 +120,7 @@ mpm [global options] <command> [options] [args...]
 | `repo add\|rm\|enable\|disable\|tag\|show` | Edit repo entries (`repo add core foo --clone`) |
 | `group list\|add\|rm\|enable\|disable\|set\|tag` | Manage groups |
 | `config get\|set\|unset\|path\|validate\|edit` | Workspace settings (`config set jobs 16`) |
+| `trust [dir]` / `untrust [dir]` | Allow a workspace's `mpm.yaml` to be loaded automatically |
 | `doctor` | Find stray checkouts, missing clones, and origin URL mismatches |
 | `discover [groups...]` | Find GitHub repos not in the config yet, via `gh` (`--add`, `--clone`) |
 | `completion bash\|zsh\|fish` | Print a shell completion script |
@@ -158,6 +161,25 @@ For `grep` and `exec`, mpm's options come first. Everything from the first
 unrecognized argument on is passed through unchanged. After `grep`, use the
 long forms of global options (`--dry-run`, `--json`, ...), or put them before
 `grep`, because short options such as `-n` belong to `git grep`.
+
+## Trusted workspaces
+
+A workspace config can run commands through aliases, so an `mpm.yaml` found by
+walking up from the current directory is only used if its directory is
+trusted. Otherwise a cloned repo containing an `mpm.yaml` could take over
+whenever you run `mpm` inside it. Untrusted configs are skipped with a notice,
+and mpm keeps looking for a trusted workspace further up.
+
+`mpm init` trusts the workspace it creates. For an existing one:
+
+```sh
+mpm trust ~/projects/dev     # lists the workspace's aliases, then trusts it
+mpm trust --list
+mpm untrust ~/projects/dev
+```
+
+The trusted list is kept in the user config, which no workspace can change. A
+workspace chosen explicitly with `-C <dir>` or `MPM_WORKSPACE` is always used.
 
 ## Shell completion
 

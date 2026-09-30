@@ -72,6 +72,13 @@ milestones 1–3 are implemented (see §8). Decisions are marked
   from inside any repo* in it.
   - ✅ Workspaces are independent; there is no global registry. Use multiple
     workspaces as needed.
+  - ✅ **Trust**: a workspace config can run commands (aliases, and hooks
+    later), so an `mpm.yaml` found by walking up is only used if its
+    directory is in the user config's `trusted` list (by real path, like
+    git `safe.directory`). Untrusted configs are skipped with a notice in
+    favor of a trusted parent, or cause an error naming `mpm trust <dir>`.
+    `-C` and `MPM_WORKSPACE` count as explicit trust; `mpm init` trusts
+    the directory it creates. Tab completion ignores untrusted workspaces.
   - ✅ Layout is **flat** (`<ws>/<repo-name>`). The schema reserves
     `settings.layout` (`flat` now; `group` / `host` possible later), and all
     path computation goes through one function so another layout is easy to

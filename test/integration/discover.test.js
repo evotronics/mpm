@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it} from 'vitest';
-import {run, tempDir, writeFiles} from '../helpers/fixtures.js';
+import {run, tempDir, trustDir, writeFiles} from '../helpers/fixtures.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -42,6 +42,7 @@ describe('discover', () => {
         'repos: [tool-cli]\n',
       'mpm.d/local.yaml': 'source: /srv/git\nrepos: [misc]\n'
     });
+    await trustDir(ws);
     await writeFiles(ghDir, {
       'example-org.json': upstream('example-org', [
         {name: 'widget'},

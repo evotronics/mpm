@@ -1,5 +1,5 @@
 import {beforeAll, describe, expect, it} from 'vitest';
-import {run, tempDir, writeFiles} from '../helpers/fixtures.js';
+import {run, tempDir, trustDir, writeFiles} from '../helpers/fixtures.js';
 import {execFile} from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -28,6 +28,7 @@ beforeAll(async () => {
     ].join('\n'),
     'mpm.d/extras.yaml': 'enabled: false\nrepos: [/srv/sample-data]\n'
   });
+  await trustDir(ws);
 });
 
 async function complete(...words) {
@@ -40,7 +41,7 @@ async function complete(...words) {
 describe('completion engine', () => {
   it('completes commands, subcommands, and aliases', async () => {
     expect(await complete('st')).toEqual(['status']);
-    expect(await complete('u')).toEqual(['up']);
+    expect(await complete('up')).toEqual(['up']);
     expect(await complete('repo', 'en')).toEqual(['enable']);
     expect(await complete('npm', '')).toEqual(
       ['install', 'ci', 'update', 'rebuild', 'ls', 'outdated']);

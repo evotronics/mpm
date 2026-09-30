@@ -11,7 +11,8 @@ describe('user config and protocol override', () => {
   beforeEach(async () => {
     const dir = await tempDir();
     ws = path.join(dir, 'ws');
-    env = {XDG_CONFIG_HOME: path.join(dir, 'config')};
+    // explicitly chosen workspaces need no trust entry
+    env = {XDG_CONFIG_HOME: path.join(dir, 'config'), MPM_WORKSPACE: ws};
     userFile = path.join(dir, 'config', 'mpm', 'config.yaml');
     await writeFiles(ws, {
       'mpm.yaml': 'version: 1\n',

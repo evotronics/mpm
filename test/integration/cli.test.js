@@ -74,7 +74,8 @@ describe('init', () => {
     const result = await run(['-n', 'init', 'ws'], {cwd: dir});
     expect(result.code).toBe(0);
     expect(result.stdout).toBe(
-      `would write ${path.join(dir, 'ws', 'mpm.yaml')}\n`);
+      `would write ${path.join(dir, 'ws', 'mpm.yaml')}\n` +
+      `would trust ${path.join(dir, 'ws')}\n`);
     expect(await exists(path.join(dir, 'ws'))).toBe(false);
   });
 });

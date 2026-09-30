@@ -86,6 +86,14 @@
   `config set|unset|edit --user` edit the user config.
 - `--dirty` selects repos with uncommitted changes or untracked files,
   for example `mpm diff --dirty` or `mpm exec --dirty -- git stash`.
+- Workspace trust. A workspace config can run commands through aliases, so
+  an `mpm.yaml` found by walking up from the current directory is only
+  loaded if its directory is in the user config's `trusted` list. This stops
+  an `mpm.yaml` inside a cloned repo from taking over. Untrusted configs
+  are skipped with a notice (a trusted parent workspace is used instead)
+  or cause an error. `mpm trust [dir]` (showing the workspace's aliases for
+  review) and `mpm untrust [dir]` manage the list; `mpm init` trusts new
+  workspaces; `-C` and `MPM_WORKSPACE` are always honored.
 - `discover` lists repos in each group's GitHub owner (via the GitHub CLI,
   `gh`) that are not in the config yet, plus name conflicts, configured
   repos gone upstream, and repos archived upstream but still enabled.
