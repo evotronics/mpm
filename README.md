@@ -10,10 +10,11 @@ across all of them (or a selected subset), in parallel.
 
 ## Install
 
-Requires Node.js >= 22.12 and git.
+Requires Node.js >= 22.12 and git. The npm package, `@evotronics/mpm`, is not
+published yet; install from a checkout:
 
 ```sh
-git clone <this repo> ~/src/mpm
+git clone https://github.com/evotronics/mpm.git ~/src/mpm
 cd ~/src/mpm && npm install && npm link   # provides `mpm`
 ```
 

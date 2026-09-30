@@ -1,10 +1,18 @@
 {
-  "name": "mpm",
+  "name": "@evotronics/mpm",
   "version": "0.1.0-0",
   "private": true,
   "description": "Multiple Project Manager: manage, update, and search many git repositories at once.",
   "license": "BSD-3-Clause",
   "author": "David I. Lehn <dil@lehn.org>",
+  "homepage": "https://github.com/evotronics/mpm#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evotronics/mpm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/evotronics/mpm/issues"
+  },
   "type": "module",
   "main": "./lib/index.js",
   "exports": {
@@ -12,8 +20,8 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "mpm": "./bin/mpm.js",
-    "multiple-project-manager": "./bin/mpm.js"
+    "mpm": "bin/mpm.js",
+    "multiple-project-manager": "bin/mpm.js"
   },
   "files": [
     "bin/",

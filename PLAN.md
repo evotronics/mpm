@@ -316,8 +316,11 @@ Key principles:
    `ConfigEditor`, which uses the `yaml` Document API to keep comments,
    validates the resulting workspace before writing, and shows a unified diff
    in dry run. ✅ `doctor`.
-5. **Polish and release**: README, docs, completion, npm publish under the
-   chosen scope.
+5. **Polish and release**: publish `@evotronics/mpm` after more real-world
+   testing. Planned: a tag-triggered release workflow using npm trusted
+   publishing (OIDC, provenance); the first publish is manual because npm
+   only allows configuring a trusted publisher for an existing package.
+   Then drop `"private": true` and date the CHANGELOG entry.
 6. **Future**: TUI, per-repo hooks or setup commands. ✅ Aliases, user
    config and protocol override, shell completion, `status --fetch`,
    `--dirty`, and `discover` are done.
@@ -342,8 +345,8 @@ Mapping, for hand conversion:
 
 ## 10. Open questions
 
-- ❓ npm scope and package name. `package.json` is `"private": true` for
-  now.
+- ✅ Package `@evotronics/mpm`, repo https://github.com/evotronics/mpm.
+  `package.json` stays `"private": true` until the first release.
 - ❓ JSON output schema details (to design with the first JSON consumers).
 - ✅ `discover` uses the GitHub CLI (`gh repo list --json`), which handles
   auth and private repos; it is only needed for `discover`.
