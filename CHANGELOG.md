@@ -107,7 +107,8 @@
 - `status --fetch` (`-f`) fetches before showing status so ahead/behind
   counts are current. Repos whose fetch fails still show their local
   status, marked `fetch failed`.
-- Shell completion for bash, zsh, and fish (`mpm completion <shell>`),
+- Shell completion for bash (3.2 or later, including macOS), zsh, and fish
+  (`mpm completion <shell>`),
   covering commands, options, repo names, group ids, tags (including inside
   tag expressions), config keys, and aliases.
 

@@ -97,6 +97,9 @@ describe('completion scripts', () => {
   });
 
   it('completes in bash', async () => {
+    // a file name with a space, and a directory named like a repo
+    await writeFiles(ws, {'my notes.txt': 'x'});
+    await fs.mkdir(path.join(ws, 'widget-web'), {recursive: true});
     const bin = await tempDir();
     await fs.symlink(BIN, path.join(bin, 'mpm'));
     const {stdout: script} = await run(['completion', 'bash'], {cwd: ws});
@@ -122,6 +125,7 @@ t mpm st
 t mpm status -g ''
 t mpm repo enable widget-
 t mpm exec -- mpm.
+t mpm exec cat my
 `;
     const {stdout} = await execFileAsync('bash', ['-c', test], {
       cwd: ws,
@@ -133,7 +137,8 @@ t mpm exec -- mpm.
       'status',
       'core extras',
       'widget-old widget-web',
-      'mpm.d mpm.yaml'
+      'mpm.d mpm.yaml',
+      'my notes.txt'
     ]);
   });
 });

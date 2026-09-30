@@ -188,7 +188,7 @@ Completes commands, options, repo names, group ids, tags, config keys, and
 aliases from the current workspace:
 
 ```sh
-source <(mpm completion bash)                         # in ~/.bashrc
+eval "$(mpm completion bash)"                         # in ~/.bashrc
 source <(mpm completion zsh)                          # in ~/.zshrc, after compinit
 mpm completion fish > ~/.config/fish/completions/mpm.fish
 ```
