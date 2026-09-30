@@ -101,12 +101,22 @@ describe('completion scripts', () => {
     await fs.symlink(BIN, path.join(bin, 'mpm'));
     const {stdout: script} = await run(['completion', 'bash'], {cwd: ws});
     await fs.writeFile(path.join(bin, 'mpm.bash'), script);
+    // prints one "reply:" line per call, plus diagnostics (bash version,
+    // raw engine output with stderr) that show up if the assertion fails
     const test = `
 source ${path.join(bin, 'mpm.bash')}
+echo "bash: $BASH_VERSION"
 t() {
   COMP_WORDS=("$@"); COMP_CWORD=$((\${#COMP_WORDS[@]} - 1)); COMPREPLY=()
   _mpm_completion
-  printf '%s\\n' "\${COMPREPLY[@]}" | LC_ALL=C sort | xargs
+  local reply
+  reply=$(printf '%s\\n' "\${COMPREPLY[@]}" | LC_ALL=C sort | tr '\\n' ' ')
+  echo "reply: \${reply% }"
+  local raw code
+  raw=$(set -o pipefail; mpm __complete -- "\${COMP_WORDS[@]:1}" 2>&1 |
+    tr '\\t\\n' '>|')
+  code=$?
+  echo "raw [$*]: $raw exit=$code"
 }
 t mpm st
 t mpm status -g ''
@@ -117,12 +127,13 @@ t mpm exec -- mpm.
       cwd: ws,
       env: {...process.env, PATH: `${bin}:${process.env.PATH}`}
     });
-    expect(stdout.split('\n')).toEqual([
+    const replies = stdout.split('\n').filter(l => l.startsWith('reply: '))
+      .map(l => l.slice('reply: '.length));
+    expect(replies, `bash test output:\n${stdout}`).toEqual([
       'status',
       'core extras',
       'widget-old widget-web',
-      'mpm.d mpm.yaml',
-      ''
+      'mpm.d mpm.yaml'
     ]);
   });
 });

@@ -253,8 +253,10 @@ describe('repo commands', () => {
     expect(result.stdout).toMatch(/would run: touch marker/);
     expect(await exists(path.join(ws, 'alpha', 'marker'))).toBe(false);
 
-    result = await run(['exec', '-n', '--read-only', 'ls'], {cwd: ws});
-    expect(result.stdout).toMatch(/=== alpha\nREADME.md\nlib/);
+    // git ls-files sorts the same everywhere (ls sorts by locale)
+    result = await run(['exec', '-n', '--read-only', 'git', 'ls-files'],
+      {cwd: ws});
+    expect(result.stdout).toMatch(/=== alpha\nREADME\.md\nlib\/index\.js/);
 
     result = await run(['exec', 'sh', '-c', 'exit 3'], {cwd: ws});
     expect(result.code).toBe(1);
